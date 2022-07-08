@@ -36,7 +36,7 @@ def handle_client(conn, addr):
             pass_account = conn.recv(1024).decode(FORMAT)
             con = sqlite3.connect('login.db')
             cur = con.cursor()
-            cur.executemany(f"SELECT password FROM login WHERE username = ?", usr_account)
+            cur.execute(f"SELECT password FROM login WHERE username = ?", (usr_account,))
     
             if(pass_account, ) in cur.fetchall():
                 print("LOGIN SUCCESSFULLY!")
