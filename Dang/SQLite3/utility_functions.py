@@ -31,4 +31,10 @@ def remove_user(user):
 user_1 = ('Anonymous', '789')
 user_2 = ('Gladious', '789')
 
+c.execute("SELECT * FROM users WHERE username='Anonymous'")
+if c.fetchone():
+    print("Found!")
+else:
+    print("Not found...")
+
 conn.close()
