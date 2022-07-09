@@ -1,6 +1,4 @@
 import socket
-from sqlite3 import connect
-from threading import activeCount
 
 
 IP = socket.gethostbyname(socket.gethostname())
