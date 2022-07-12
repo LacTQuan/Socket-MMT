@@ -28,20 +28,21 @@ window.geometry('720x560')
 
 
 # ==============================
-#       NAVIGATION MENU
+#         FUTURE FRAMES
 # ==============================
-# Frames define
-
-# Sign up: clicked + view
-# Sign in: clicked + view
-# Home (Homescreen): view + return
-# New text: clicked + view
-# Upload image: clicked + view
-# Upload file: clicked + view
-# Open file: view + view_file_clicked + download_file + return_to_open_file
-
-# Menu define
-# ==============================
+# FRAMES
+# - Start screen: Sign in + Sign up + Exit program
+# - Home screen (display username): New text + Upload image + Upload file + Open file + Sign out
+# 
+# - Sign in (signin_frame)
+# - Sign up (signup_frame)
+# - New text (new_text_frame)
+# - Upload Image (img_frame)
+# - Upload file (file_frame)
+# - Open file (open_frame): View file + Download file
+# - View file (view_frame)
+# 
+# NOTE: "home_frame" will be divided into Start screen and Home screen
 
 
 
