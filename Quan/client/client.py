@@ -26,6 +26,25 @@ window = Tk()
 window.geometry('720x560')
 
 
+
+# ==============================
+#       NAVIGATION MENU
+# ==============================
+# Frames define
+
+# Sign up: clicked + view
+# Sign in: clicked + view
+# Home (Homescreen): view + return
+# New text: clicked + view
+# Upload image: clicked + view
+# Upload file: clicked + view
+# Open file: view + view_file_clicked + download_file + return_to_open_file
+
+# Menu define
+# ==============================
+
+
+
 # Frames
 home_frame = Frame(window)
 new_text_frame = Frame(window)
