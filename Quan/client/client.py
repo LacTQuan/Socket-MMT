@@ -403,10 +403,10 @@ table.column('#2', anchor=CENTER)
 table.heading('#2', text='Type')
 table.pack()
 
-o_file_name_l = Label(open_frame, text='File name:')
-o_file_name_l.pack(pady=10, expand=True)
-o_file_name = Entry(open_frame)
-o_file_name.pack(pady=10, expand=True)
+# o_file_name_l = Label(open_frame, text='File name:')
+# o_file_name_l.pack(pady=10, expand=True)
+# o_file_name = Entry(open_frame)
+# o_file_name.pack(pady=10, expand=True)
 
 username_label = Label(open_frame, text=username)
 username_label.pack(fill='x', expand=True)
@@ -429,8 +429,9 @@ download_button.pack(pady=10)
 
 
 def view_clicked():
-    if len(o_file_name.get()) == 0:
-        messagebox.showinfo('A', 'Invalid name')
+    selected = table.focus()
+    if selected == '':
+        messagebox.showinfo('A', 'Please choose a specific item!!!')
         return
     new_text_frame.pack_forget()
     img_frame.pack_forget()
@@ -443,9 +444,12 @@ def view_clicked():
     global open_file_on
     open_file_on = False
 
-    client.sendall(str(len(o_file_name.get())).encode(FORMAT))
+    tmp = table.item(selected, 'values')
+    o_file_name = tmp[0].strip()
+
+    client.sendall(str(len(o_file_name)).encode(FORMAT))
     client.recv(1024)
-    client.sendall(o_file_name.get().encode(FORMAT))
+    client.sendall(o_file_name.encode(FORMAT))
     size = client.recv(1024).decode(FORMAT)
     client.sendall('OK'.encode(FORMAT))
     type = client.recv(int(size)).decode(FORMAT)
@@ -496,7 +500,7 @@ def open_file():
     else: open_file_on = True
 
     view_box.delete('1.0', END)
-    o_file_name.delete(0, 'end')
+    # o_file_name.delete(0, 'end')
     
 
     client.sendall(OPEN.encode(FORMAT))
