@@ -66,8 +66,8 @@ home_frame = Frame(window, padx = 2, bg= '#DAE2B6')
 header_frame = Frame(window)
 menu_frame = Frame(window, bg='#DAE2B6')
 new_text_frame = Frame(window, bg='#DAE2B6')
-img_frame = Frame(window)
-file_frame = Frame(window)
+img_frame = Frame(window, padx= 50, pady=50, bg= '#DAE2B6')
+file_frame = Frame(window, padx= 50, pady=50, bg= '#DAE2B6')
 open_frame = Frame(window)
 # view_frame = Frame(window)
 signin_frame = Frame(window, bg='#DAE2B6')
@@ -300,7 +300,7 @@ text_box = Text(new_text_frame, height=15, width=65, font=("Consolas", 11))
 text_box.insert(INSERT, "Your text here...")
 text_box.pack(pady=30)
 
-t_file_name_l = Label(new_text_frame, text='File name')
+t_file_name_l = Label(new_text_frame, text='File name', font=("Consolas",12))
 t_file_name_l.pack(fill='x', expand=True)
 t_file_name = Entry(new_text_frame)
 t_file_name.pack(fill='x', expand=True)
@@ -337,7 +337,7 @@ def save_text_clicked():
         if msg == 'Success':
             break
 
-save_text_button = Button(new_text_frame, text='Save text', command=save_text_clicked)
+save_text_button = Button(new_text_frame, text='SAVE', bg= "pink", fg="black",font=("Times New Roman",12, "bold"),command=save_text_clicked)
 save_text_button.pack(anchor=E)
 
 def new_text():
@@ -358,10 +358,10 @@ def new_text():
 
 
 # Upload image
-i_file_name_l = Label(img_frame, text='File name')
-i_file_name_l.pack(fill='x', expand=True)
-i_file_name = Entry(img_frame)
-i_file_name.pack(fill='x', expand=True)
+i_file_name_l = Label(img_frame, text='File name',font= ("Times New Roman", 15))
+i_file_name_l.pack(fill='x', expand=1)
+i_file_name = Entry(img_frame,insertwidth=30,bg='#DAE2B6', font=("Times New Roman", 14))
+i_file_name.pack(fill='x', expand=1)
 
 
 def upload_img_clicked():
@@ -394,8 +394,9 @@ def upload_img_clicked():
     msg = client.recv(1024).decode(FORMAT)
     messagebox.showinfo('A', msg)
 
-upload_img_button = Button(img_frame, text='Save image', command=upload_img_clicked)
-upload_img_button.pack()
+upload_img_button = Button(img_frame, text='Save image',font=("Consolas", 14), command=upload_img_clicked)
+upload_img_button.pack(fill=BOTH, expand=1)
+
 
 def upload_img():
     if username == '':
@@ -415,9 +416,9 @@ def upload_img():
 
 
 # Upload file
-f_file_name_l = Label(file_frame, text='File name')
+f_file_name_l = Label(file_frame, text='File name',font= ("Times New Roman", 15))
 f_file_name_l.pack(fill='x', expand=True)
-f_file_name = Entry(file_frame)
+f_file_name = Entry(file_frame,insertwidth=30,bg='#DAE2B6', font=("Times New Roman", 14))
 f_file_name.pack(fill='x', expand=True)
 
 
@@ -451,7 +452,7 @@ def upload_file_clicked():
     msg = client.recv(1024).decode(FORMAT)
     messagebox.showinfo('A', msg)
 
-upload_file_button = Button(file_frame, text='Save file', command=upload_file_clicked)
+upload_file_button = Button(file_frame,text='   Save file  ',font=("Times New Roman", 14), command=upload_file_clicked)
 upload_file_button.pack()
 
 def upload_file():
@@ -560,7 +561,7 @@ def view_clicked():
     open_file_in_new_window(open_file_type)
 
 
-view_button = Button(open_frame, text='View', command=view_clicked)
+view_button = Button(open_frame, text='View', font=('consolas', 14), command=view_clicked)
 view_button.pack(pady=10)
 
 def open_file():
@@ -637,7 +638,7 @@ def logout():
     global username
     username = ''
     menu_frame.pack_forget()
-    home_frame.pack()
+    home_view()
     client.sendall(LOGOUT.encode(FORMAT))
 
 
@@ -646,16 +647,18 @@ helpMenu.add_command(label='Exit', command=quit_clicked)
 menu.add_cascade(label='Help', menu=helpMenu)
 
 #Main menu
+headingMENU = Label(menu_frame, text="    MENU    ", font=('yu gothic ui', 25, "bold"), bg="#040405",fg='white', bd=5, relief=FLAT)
+headingMENU.grid(row=1, column=0, columnspan=3, pady=8)
 newtext_button = Button(menu_frame, text = "  NEW TEXT  ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= new_text)
-newtext_button.grid(row=1, column=0, columnspan=3, pady=10)
+newtext_button.grid(row=2, column=0, columnspan=3, pady=10)
 uploadimage_button = Button(menu_frame, text = "UPLOAD IMAGE", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= upload_img)
-uploadimage_button.grid(row=2, column=0, columnspan=3, pady=10)
+uploadimage_button.grid(row=3, column=0, columnspan=3, pady=10)
 uploadfile_button = Button(menu_frame, text = "UPLOAD FILE ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= upload_file)
-uploadfile_button.grid(row=3, column=0, columnspan=3, pady=10)
+uploadfile_button.grid(row=4, column=0, columnspan=3, pady=10)
 openfile_button = Button(menu_frame, text = " OPEN FILE  ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= open_file)
-openfile_button.grid(row=4, column=0, columnspan=3, pady=10)
+openfile_button.grid(row=5, column=0, columnspan=3, pady=10)
 logout_button = Button(menu_frame, text = "  LOG OUT   ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= logout)
-logout_button.grid(row=5, column=0, columnspan=3, pady=10)
+logout_button.grid(row=6, column=0, columnspan=3, pady=10)
 
 def menu_view():
     new_text_frame.pack_forget()
@@ -668,13 +671,13 @@ def menu_view():
     home_frame.pack_forget()
     menu_frame.pack(expand=1)
 
-backMenu_button1 = Button(new_text_frame, text=" Back ",  command=menu_view)
+backMenu_button1 = Button(new_text_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("Times New Roman", 16, 'bold'),  command=menu_view)
 backMenu_button1.pack()
-backMenu_button2 = Button(img_frame, text=" Back ",  command=menu_view)
+backMenu_button2 = Button(img_frame, text=" BACK ", bg='black', fg="#FF3399", font=("Consolas", 14, 'bold'), command=menu_view)
 backMenu_button2.pack()
-backMenu_button3 = Button(file_frame, text=" Back ",  command=menu_view)
+backMenu_button3 = Button(file_frame, text=" BACK ", bg='black', fg="#FF3399", font=("Consolas", 14, 'bold'), command=menu_view)
 backMenu_button3.pack()
-backMenu_button4 = Button(open_frame, text=" Back ",  command=menu_view)
+backMenu_button4 = Button(open_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("Times New Roman", 16, 'bold'), command=menu_view)
 backMenu_button4.pack()
 
 
