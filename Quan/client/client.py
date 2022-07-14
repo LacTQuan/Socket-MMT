@@ -64,11 +64,11 @@ window['bg']='#DAE2B6'
 home_frame = Frame(window, padx = 2, bg= '#DAE2B6')
 header_frame = Frame(window)
 menu_frame = Frame(window, bg='#DAE2B6')
-new_text_frame = Frame(window)
+new_text_frame = Frame(window, bg='#DAE2B6')
 img_frame = Frame(window)
 file_frame = Frame(window)
 open_frame = Frame(window)
-view_frame = Frame(window)
+# view_frame = Frame(window)
 signin_frame = Frame(window, bg='#DAE2B6')
 signup_frame = Frame(window, bg='#DAE2B6')
 
@@ -121,7 +121,7 @@ new_password.grid(row=2, column=1, pady=16)
 
 
 def sign_up_clicked():
-    if len(new_username.get()) == 0 or len(new_password.get()) == 0: messagebox.showinfo("Thông báo", "Vui lòng nhập đầy đủ thông tin")
+    if len(new_username.get()) == 0 or len(new_password.get()) == 0: messagebox.showinfo("Sign Up", "Please enter the full information.")
     else:
         client.sendall(SIGNUP.encode(FORMAT))
         client.recv(1024)
@@ -136,13 +136,13 @@ def sign_up_clicked():
         # check validation
         validation = int(client.recv(1024).decode(FORMAT))
         if validation == 1:
-            print("  (server) : username must has at least 5 characters.")
+            messagebox.showwarning("Sign Up","Username must has at least 5 characters.")
         elif validation == 2:
-            print("  (server) : password must has at least 3 characters.")
+            messagebox.showwarning("Sign Up","Password must has at least 3 characters.")
         elif validation == 3:
-            print(f"  (server) : '{new_usrname}' already existed.")
+            messagebox.showwarning("Sign Up",f"'{new_usrname}' already existed.")
         else: 
-            print("  (server) : registered successfully.")
+            messagebox.showinfo("Sign Up","Registered successfully. This account can now be use to sign in.")
             new_password.delete(0, 'end')
             new_username.delete(0, 'end')
 
@@ -152,13 +152,9 @@ sign_up_button.grid(row=3, column=0, columnspan=2, pady=16)
 
 
 def sign_up_view():
-    new_text_frame.pack_forget()
-    img_frame.pack_forget()
-    file_frame.pack_forget()
-    open_frame.pack_forget()
-    view_frame.pack_forget()
-    signin_frame.pack_forget()
+    header_frame.pack_forget()
     home_frame.pack_forget()
+    header_frame.pack(fill='x', expand=1)
     signup_frame.pack()
 
 
@@ -230,13 +226,9 @@ sign_in_button.grid(row=3, column=0, columnspan=2, pady=16)
       
 
 def sign_in_view():
-    new_text_frame.pack_forget()
-    img_frame.pack_forget()
-    file_frame.pack_forget()
-    open_frame.pack_forget()
-    view_frame.pack_forget()
+    header_frame.pack_forget()
     home_frame.pack_forget()
-    signup_frame.pack_forget()
+    header_frame.pack(fill='x', expand=1)
     signin_frame.pack()
 
 
@@ -282,15 +274,18 @@ student1.grid(row = 21, column = 0, pady= 11, padx= 5)
 
 # RETURN HOME
 
-def back_home():
+def home_view():
+    header_frame.pack_forget()
+    menu_frame.pack_forget()
     signin_frame.pack_forget()
     signup_frame.pack_forget()
+    header_frame.pack(fill='x', expand=1)
     home_frame.pack()
 
-back_button1 = Button(signin_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("yu gothic ui", 16, 'bold'), command=back_home)
+back_button1 = Button(signin_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("yu gothic ui", 16, 'bold'), command=home_view)
 back_button1.grid(row=4, column=0, columnspan=2, pady=10)
 
-back_button2 = Button(signup_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("yu gothic ui", 16, 'bold'), command=back_home)
+back_button2 = Button(signup_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("yu gothic ui", 16, 'bold'), command=home_view)
 back_button2.grid(row=4, column=0, columnspan=2, pady=10)
 
 
@@ -300,8 +295,9 @@ back_button2.grid(row=4, column=0, columnspan=2, pady=10)
 
 
 # New text
-text_box = Text(new_text_frame, height=10, width=50)
-text_box.pack()
+text_box = Text(new_text_frame, height=15, width=65, font=("Consolas", 11))
+text_box.insert(INSERT, "Your text here...")
+text_box.pack(pady=30)
 
 t_file_name_l = Label(new_text_frame, text='File name')
 t_file_name_l.pack(fill='x', expand=True)
@@ -341,18 +337,13 @@ def save_text_clicked():
             break
 
 save_text_button = Button(new_text_frame, text='Save text', command=save_text_clicked)
-save_text_button.pack()    
+save_text_button.pack(anchor=E)
 
 def new_text():
     if username == '':
         messagebox.showerror('Error', 'Login first!!!')
         return
-    img_frame.pack_forget()
-    file_frame.pack_forget()
-    open_frame.pack_forget()
-    view_frame.pack_forget()
-    signin_frame.pack_forget()
-    signup_frame.pack_forget()
+    menu_frame.pack_forget()
     new_text_frame.pack()
     global open_file_on
     if open_file_on:
@@ -409,12 +400,7 @@ def upload_img():
     if username == '':
         messagebox.showerror('Error', 'Login first!!!')
         return
-    new_text_frame.pack_forget()
-    file_frame.pack_forget()
-    open_frame.pack_forget()
-    view_frame.pack_forget()
-    signin_frame.pack_forget()
-    signup_frame.pack_forget()
+    menu_frame.pack_forget()
     img_frame.pack()
     global open_file_on
     if open_file_on:
@@ -471,12 +457,7 @@ def upload_file():
     if username == '':
         messagebox.showerror('Error', 'Login first!!!')
         return
-    new_text_frame.pack_forget()
-    img_frame.pack_forget()
-    open_frame.pack_forget()
-    view_frame.pack_forget()
-    signin_frame.pack_forget()
-    signup_frame.pack_forget()
+    menu_frame.pack_forget()
     file_frame.pack()
     global open_file_on
     if open_file_on:
@@ -516,24 +497,36 @@ def download_file():
         g.write(data)
     messagebox.showinfo('A', 'Download successfull')
 
-view_box = Text(view_frame, height=20, width=30)
-view_box.pack(padx=20, pady=20)
-download_button = Button(view_frame, text='Download', command=download_file)
-download_button.pack(pady=10)
 
+def open_file_in_new_window(open_file_type):
+    new_Window = Toplevel()
+    new_Window.title('New Window')
+
+    if open_file_type == 'txt':
+        view_box = Text(new_Window)  # height=20, width=30 # padx=20, pady=20        
+        with open(ADDR+'tempFile.txt', 'r') as f:
+            view_box.insert(INSERT, f.read())
+        view_box.pack()
+    elif open_file_type == 'jpg' or open_file_type == 'png' or open_file_type == 'gif':
+        global tk_image
+
+        tk_image = ImageTk.PhotoImage(Image.open(ADDR+'tempFile.'+open_file_type))
+        view_img = Label(new_Window, image=tk_image)
+        view_img.pack()
+        # view_box.image_create(END, image=tk_image)
+
+    download_button = Button(new_Window, text='Download', command=download_file)
+    download_button.pack()
+    return_button = Button(new_Window, text='Exit', command=new_Window.destroy)
+    return_button.pack()
 
 def view_clicked():
     selected = table.focus()
     if selected == '':
         messagebox.showinfo('A', 'Please choose a specific item!!!')
         return
-    new_text_frame.pack_forget()
-    img_frame.pack_forget()
-    file_frame.pack_forget()
-    open_frame.pack_forget()
-    signin_frame.pack_forget()
-    signup_frame.pack_forget()
-    view_frame.pack()
+    # open_frame.pack_forget()
+    # view_frame.pack()
 
     global open_file_on
     open_file_on = False
@@ -558,14 +551,8 @@ def view_clicked():
     f = open(ADDR+'tempFile.'+open_file_type, 'wb')
     f.write(data)
     f.close()
-    if open_file_type == 'txt':
-        with open(ADDR+'tempFile.txt', 'r') as f:
-            view_box.insert(INSERT, f.read())
-    elif open_file_type == 'jpg' or open_file_type == 'png' or open_file_type == 'gif':
-        img = Image.open(ADDR+'tempFile.'+open_file_type)
-        global tk_image
-        tk_image = ImageTk.PhotoImage(img)
-        view_box.image_create(END, image=tk_image)
+
+    open_file_in_new_window(open_file_type)
 
 
 view_button = Button(open_frame, text='View', command=view_clicked)
@@ -580,12 +567,8 @@ def open_file():
     for item in table.get_children():
         table.delete(item)
 
-    new_text_frame.pack_forget()
-    file_frame.pack_forget()
-    img_frame.pack_forget()
-    view_frame.pack_forget()
-    signin_frame.pack_forget()
-    signup_frame.pack_forget()
+    menu_frame.pack_forget()
+    # view_frame.pack_forget()
     open_frame.pack()
     global open_file_on
     if open_file_on:
@@ -593,7 +576,7 @@ def open_file():
         client.recv(1024)
     else: open_file_on = True
 
-    view_box.delete('1.0', END)
+    # view_box.delete('1.0', END)
     # o_file_name.delete(0, 'end')
     
 
@@ -622,9 +605,6 @@ def open_file():
 def return_to_open_file():
     os.remove(ADDR+'tempFile.'+open_file_type)
     open_file()
-
-return_button = Button(view_frame, text='Return', command=open_file)
-return_button.pack(pady=10)
 
 
 
@@ -673,11 +653,22 @@ def menu_view():
     img_frame.pack_forget()
     file_frame.pack_forget()
     open_frame.pack_forget()
-    view_frame.pack_forget()
     signin_frame.pack_forget()
-    home_frame.pack_forget()
     signup_frame.pack_forget()
-    menu_frame.pack()
+    header_frame.pack_forget()
+    home_frame.pack_forget()
+    menu_frame.pack(expand=1)
+
+backMenu_button1 = Button(new_text_frame, text=" Back ",  command=menu_view)
+backMenu_button1.pack()
+backMenu_button2 = Button(img_frame, text=" Back ",  command=menu_view)
+backMenu_button2.pack()
+backMenu_button3 = Button(file_frame, text=" Back ",  command=menu_view)
+backMenu_button3.pack()
+backMenu_button4 = Button(open_frame, text=" Back ",  command=menu_view)
+backMenu_button4.pack()
+
+
 
 
 
@@ -688,8 +679,7 @@ def main():
     print('Waiting for server...')
     try:
         print('Connected to server')
-        header_frame.pack(fill='x', expand=1)
-        home_frame.pack()
+        home_view()
         window.mainloop()
     except:
         client.close()
