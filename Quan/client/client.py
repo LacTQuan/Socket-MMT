@@ -68,7 +68,7 @@ menu_frame = Frame(window, bg='#DAE2B6')
 new_text_frame = Frame(window, bg='#DAE2B6')
 img_frame = Frame(window, padx= 50, pady=50, bg= '#DAE2B6')
 file_frame = Frame(window, padx= 50, pady=50, bg= '#DAE2B6')
-open_frame = Frame(window)
+open_frame = Frame(window, bg='#DAE2B6')
 # view_frame = Frame(window)
 signin_frame = Frame(window, bg='#DAE2B6')
 signup_frame = Frame(window, bg='#DAE2B6')
@@ -485,8 +485,8 @@ table.pack()
 # o_file_name = Entry(open_frame)
 # o_file_name.pack(pady=10, expand=True)
 
-username_label = Label(open_frame, text=username)
-username_label.pack(fill='x', expand=True)
+# username_label = Label(open_frame, text=username)
+# username_label.pack(fill='x', expand=True)
 
 
 def download_file():
@@ -507,7 +507,9 @@ def return_to_open_file(new_Window):
 
 def open_file_in_new_window(open_file_type):
     new_Window = Toplevel()
-    new_Window.title('New Window')
+    new_Window.title('File')
+    window.iconbitmap('client/eNote.ico')
+
     if open_file_type == 'txt':
         view_box = Text(new_Window)  # height=20, width=30 # padx=20, pady=20        
         with open(ADDR+'tempFile.txt', 'r') as f:
@@ -575,7 +577,7 @@ def open_file():
 
     menu_frame.pack_forget()
     # view_frame.pack_forget()
-    open_frame.pack()
+    open_frame.pack(expand=1)
     global open_file_on
     if open_file_on:
         client.sendall('Quit open file'.encode(FORMAT))
