@@ -17,6 +17,7 @@ SIGNIN = 'Sign in'
 SIGNUP = 'Sign up'
 QUIT = 'Quit'
 LOGOUT = 'Log out'
+VIEW = 'View file'
 
 
 server = socket(AF_INET, SOCK_STREAM)
@@ -45,9 +46,7 @@ def client_handler(conn, addr):
             upload_file(cur, conn, os)
             mydb.commit()
         elif choice == OPEN:
-            if open_file(cur, conn) == QUIT:
-                Exit(conn, addr, username)
-                break
+            open_file(cur, conn)
         elif choice == SIGNIN:
             username = client_signin(conn, cur, cur_user)
         elif choice == SIGNUP:
@@ -59,6 +58,8 @@ def client_handler(conn, addr):
         elif choice == LOGOUT:
             cur_user.remove(username)
             username = ''
+        elif choice == VIEW:
+            view_file(cur, conn)
     
 
 

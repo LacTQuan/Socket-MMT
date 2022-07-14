@@ -194,12 +194,13 @@ def open_file(cur, conn):
 
     conn.sendall('end'.encode(FORMAT))
 
+def view_file(cur, conn):
+    conn.sendall('OK'.encode(FORMAT))
+    username = conn.recv(1024).decode(FORMAT)
+    conn.sendall('OK'.encode(FORMAT))
+
     size = conn.recv(1024).decode(FORMAT)
     conn.sendall('OK'.encode(FORMAT))
-    if size == 'Quit open file':
-        return ''
-    if size == 'Quit':
-        return 'Quit'
     file_name = conn.recv(int(size)).decode(FORMAT)
 
     cur.execute('SELECT * FROM files WHERE file_name=? LIMIT 1', (username+'_'+file_name, ))
@@ -213,4 +214,3 @@ def open_file(cur, conn):
     conn.sendall(str(len(data)).encode(FORMAT))
     conn.recv(1024)
     conn.sendall(data)
-    return ''

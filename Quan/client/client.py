@@ -1,10 +1,8 @@
 from socket import *
-# from telnetlib import LOGOUT
 from tkinter import *
 from tkinter import filedialog, messagebox
 from tkinter import ttk
 import os, glob
-# from turtle import home
 from PIL import Image, ImageTk
 
 IP = '127.0.0.1'
@@ -21,6 +19,7 @@ SIGNIN = 'Sign in'
 SIGNUP = 'Sign up'
 QUIT = 'Quit'
 LOGOUT = 'Log out'
+VIEW = 'View file'
 
 client = socket(AF_INET, SOCK_STREAM)
 client.connect((IP, PORT))
@@ -74,7 +73,6 @@ signin_frame = Frame(window, bg='#DAE2B6')
 signup_frame = Frame(window, bg='#DAE2B6')
 
 
-open_file_on = False
 
 
 username = ''
@@ -346,11 +344,6 @@ def new_text():
         return
     menu_frame.pack_forget()
     new_text_frame.pack()
-    global open_file_on
-    if open_file_on:
-        client.sendall('Quit open file'.encode(FORMAT))
-        client.recv(1024)
-    open_file_on = False
 
 
 
@@ -404,11 +397,6 @@ def upload_img():
         return
     menu_frame.pack_forget()
     img_frame.pack()
-    global open_file_on
-    if open_file_on:
-        client.sendall('Quit open file'.encode(FORMAT))
-        client.recv(1024)
-    open_file_on = False
     
 
 
@@ -461,11 +449,6 @@ def upload_file():
         return
     menu_frame.pack_forget()
     file_frame.pack()
-    global open_file_on
-    if open_file_on:
-        client.sendall('Quit open file'.encode(FORMAT))
-        client.recv(1024)
-    open_file_on = False
 
 
 
@@ -529,6 +512,12 @@ def open_file_in_new_window(open_file_type):
     return_button.pack()
 
 def view_clicked():
+    client.sendall(VIEW.encode(FORMAT))
+    client.recv(1024)
+    client.sendall(username.encode(FORMAT))
+    client.recv(1024)
+
+
     selected = table.focus()
     if selected == '':
         messagebox.showinfo('A', 'Please choose a specific item!!!')
@@ -536,8 +525,6 @@ def view_clicked():
     # open_frame.pack_forget()
     # view_frame.pack()
 
-    global open_file_on
-    open_file_on = False
 
     tmp = table.item(selected, 'values')
     o_file_name = tmp[0].strip()
@@ -578,11 +565,6 @@ def open_file():
     menu_frame.pack_forget()
     # view_frame.pack_forget()
     open_frame.pack(expand=1)
-    global open_file_on
-    if open_file_on:
-        client.sendall('Quit open file'.encode(FORMAT))
-        client.recv(1024)
-    else: open_file_on = True
 
     # view_box.delete('1.0', END)
     # o_file_name.delete(0, 'end')
@@ -616,10 +598,11 @@ def open_file():
 
 
 
+
 # Menu
 
-menu = Menu(window)
-window.config(menu=menu)
+# menu = Menu(window)
+# window.config(menu=menu)
 
 # fileMenu = Menu(menu)
 # fileMenu.add_command(label='New text', command=new_text)
@@ -644,9 +627,9 @@ def logout():
     client.sendall(LOGOUT.encode(FORMAT))
 
 
-helpMenu = Menu(menu)
-helpMenu.add_command(label='Exit', command=quit_clicked)
-menu.add_cascade(label='Help', menu=helpMenu)
+# helpMenu = Menu(menu)
+# helpMenu.add_command(label='Exit', command=quit_clicked)
+# menu.add_cascade(label='Help', menu=helpMenu)
 
 #Main menu
 headingMENU = Label(menu_frame, text="    MENU    ", font=('yu gothic ui', 25, "bold"), bg="#040405",fg='white', bd=5, relief=FLAT)
@@ -661,6 +644,8 @@ openfile_button = Button(menu_frame, text = " OPEN FILE  ", bg= "#FF7396", fg="#
 openfile_button.grid(row=5, column=0, columnspan=3, pady=10)
 logout_button = Button(menu_frame, text = "  LOG OUT   ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= logout)
 logout_button.grid(row=6, column=0, columnspan=3, pady=10)
+exit_button = Button(menu_frame, text = "    EXIT    ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= quit_clicked)
+exit_button.grid(row=7, column=0, columnspan=3, pady=10)
 
 def menu_view():
     new_text_frame.pack_forget()
