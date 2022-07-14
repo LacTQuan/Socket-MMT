@@ -1,10 +1,10 @@
 from socket import *
-from telnetlib import LOGOUT
+# from telnetlib import LOGOUT
 from tkinter import *
 from tkinter import filedialog, messagebox
 from tkinter import ttk
 import os, glob
-from turtle import home
+# from turtle import home
 from PIL import Image, ImageTk
 
 IP = '127.0.0.1'
@@ -20,6 +20,7 @@ OPEN = 'Open file'
 SIGNIN = 'Sign in'
 SIGNUP = 'Sign up'
 QUIT = 'Quit'
+LOGOUT = 'Log out'
 
 client = socket(AF_INET, SOCK_STREAM)
 client.connect((IP, PORT))
@@ -498,10 +499,14 @@ def download_file():
     messagebox.showinfo('A', 'Download successfull')
 
 
+
+def return_to_open_file(new_Window):
+    new_Window.destroy()
+    open_file()
+
 def open_file_in_new_window(open_file_type):
     new_Window = Toplevel()
     new_Window.title('New Window')
-
     if open_file_type == 'txt':
         view_box = Text(new_Window)  # height=20, width=30 # padx=20, pady=20        
         with open(ADDR+'tempFile.txt', 'r') as f:
@@ -517,7 +522,7 @@ def open_file_in_new_window(open_file_type):
 
     download_button = Button(new_Window, text='Download', command=download_file)
     download_button.pack()
-    return_button = Button(new_Window, text='Exit', command=new_Window.destroy)
+    return_button = Button(new_Window, text='Exit', command=lambda: return_to_open_file(new_Window))
     return_button.pack()
 
 def view_clicked():
@@ -602,10 +607,6 @@ def open_file():
         table.insert('', END, values=(name, type, ))
 
 
-def return_to_open_file():
-    os.remove(ADDR+'tempFile.'+open_file_type)
-    open_file()
-
 
 
 
@@ -632,6 +633,14 @@ def quit_clicked():
     client.close()
     window.quit()
 
+def logout():
+    global username
+    username = ''
+    menu_frame.pack_forget()
+    home_frame.pack()
+    client.sendall(LOGOUT.encode(FORMAT))
+
+
 helpMenu = Menu(menu)
 helpMenu.add_command(label='Exit', command=quit_clicked)
 menu.add_cascade(label='Help', menu=helpMenu)
@@ -645,7 +654,7 @@ uploadfile_button = Button(menu_frame, text = "UPLOAD FILE ", bg= "#FF7396", fg=
 uploadfile_button.grid(row=3, column=0, columnspan=3, pady=10)
 openfile_button = Button(menu_frame, text = " OPEN FILE  ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= open_file)
 openfile_button.grid(row=4, column=0, columnspan=3, pady=10)
-logout_button = Button(menu_frame, text = "  LOG OUT   ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= LOGOUT)
+logout_button = Button(menu_frame, text = "  LOG OUT   ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= logout)
 logout_button.grid(row=5, column=0, columnspan=3, pady=10)
 
 def menu_view():

@@ -3,6 +3,8 @@
 -- type TEXT NOT NULL,
 -- contents LONGBLOB)
 
-CREATE TABLE users (
-username TEXT NOT NULL PRIMARY KEY,
-password TEXT NOT NULL)
+-- CREATE TABLE users (
+-- username TEXT NOT NULL PRIMARY KEY,
+-- password TEXT NOT NULL)
+
+INSERT INTO users (username, password) VALUES ('Tim', '123')

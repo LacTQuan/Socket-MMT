@@ -16,11 +16,18 @@ OPEN = 'Open file'
 SIGNIN = 'Sign in'
 SIGNUP = 'Sign up'
 QUIT = 'Quit'
+LOGOUT = 'Log out'
 
 
 server = socket(AF_INET, SOCK_STREAM)
 
 cur_user = []
+
+def Exit(conn, addr, username):
+    conn.close()
+    if username != '':
+        cur_user.remove(username)
+    print(f'{addr[0]} : {addr[1]} disconnected')
 
 def client_handler(conn, addr):
     mydb = sqlite3.connect(ADDR+'data.db')
@@ -38,17 +45,20 @@ def client_handler(conn, addr):
             upload_file(cur, conn, os)
             mydb.commit()
         elif choice == OPEN:
-            open_file(cur, conn)
+            if open_file(cur, conn) == QUIT:
+                Exit(conn, addr, username)
+                break
         elif choice == SIGNIN:
             username = client_signin(conn, cur, cur_user)
         elif choice == SIGNUP:
             client_register(conn, cur)
             mydb.commit()
         elif choice == QUIT:
-            conn.close()
-            cur_user.remove(username)
-            print(f'{addr[0]} : {addr[1]} disconnected')
+            Exit(conn, addr, username)
             break
+        elif choice == LOGOUT:
+            cur_user.remove(username)
+            username = ''
     
 
 
