@@ -1,8 +1,10 @@
 from socket import *
+from telnetlib import LOGOUT
 from tkinter import *
-from tkinter.ttk import *
 from tkinter import filedialog, messagebox
+from tkinter import ttk
 import os, glob
+from turtle import home
 from PIL import Image, ImageTk
 
 IP = '127.0.0.1'
@@ -22,8 +24,20 @@ QUIT = 'Quit'
 client = socket(AF_INET, SOCK_STREAM)
 client.connect((IP, PORT))
 
+#Window App
 window = Tk()
-window.geometry('720x560')
+app_width = 720
+app_height = 560
+
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+
+x = (screen_width/2) - (app_width/2)
+y = (screen_height/2) - (app_height/2)
+window.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')
+window.title('E-NOTE')
+window.iconbitmap('client/eNote.ico')
+window['bg']='#DAE2B6'
 
 
 
@@ -47,14 +61,16 @@ window.geometry('720x560')
 
 
 # Frames
-home_frame = Frame(window)
+home_frame = Frame(window, padx = 2, bg= '#DAE2B6')
+header_frame = Frame(window)
+menu_frame = Frame(window, bg='#DAE2B6')
 new_text_frame = Frame(window)
 img_frame = Frame(window)
 file_frame = Frame(window)
 open_frame = Frame(window)
 view_frame = Frame(window)
-signin_frame = Frame(window)
-signup_frame = Frame(window)
+signin_frame = Frame(window, bg='#DAE2B6')
+signup_frame = Frame(window, bg='#DAE2B6')
 
 
 open_file_on = False
@@ -64,7 +80,7 @@ username = ''
 
 
 
-
+#Decor Home Screen
 
 
 
@@ -76,17 +92,32 @@ username = ''
 
 
 # Sign up
-new_username_l = Label(signup_frame, text="Username")
-new_username_l.pack(fill='x', expand=True)
 
-new_username = Entry(signup_frame)
-new_username.pack(fill='x', expand=True)
+# Creating widgets
+logup_label = Label(signup_frame, text="SIGN UP", bg='#333333', fg="#FF3399", font=("yu gothic ui", 30))
+username_label = Label(signup_frame, text="Username", bg='#333333', fg="#FFFFFF", font=("yu gothic ui", 16))
+new_username = Entry(signup_frame, font=("yu gothic ui", 16))
+new_password = Entry(signup_frame, show="*", font=("yu gothic ui", 16))
+password_label = Label(signup_frame, text="Password ", bg='#333333', fg="#FFFFFF", font=("yu gothic ui", 16))
 
-new_password_l = Label(signup_frame, text="Password")
-new_password_l.pack(fill='x', expand=True)
 
-new_password = Entry(signup_frame, show="*")
-new_password.pack(fill='x', expand=True)
+# Placing widgets on the screen
+logup_label.grid(row=0, column=0, columnspan=2, sticky="news", pady=40)
+username_label.grid(row=1, column=0)
+new_username.grid(row=1, column=1, pady=16)
+password_label.grid(row=2, column=0)
+new_password.grid(row=2, column=1, pady=16)
+#new_username_l = Label(signup_frame, text="Username", bg='#DAE2B6')
+#new_username_l.pack(fill='x', expand=True)
+
+#new_username = Entry(signup_frame)
+#new_username.pack(fill='x', expand=True)
+
+#new_password_l = Label(signup_frame, text="Password")
+#new_password_l.pack(fill='x', expand=True)
+
+#new_password = Entry(signup_frame, show="*")
+#new_password.pack(fill='x', expand=True)
 
 
 def sign_up_clicked():
@@ -116,8 +147,9 @@ def sign_up_clicked():
             new_username.delete(0, 'end')
 
 
-sign_up_button = Button(signup_frame, text='Sign up', command=sign_up_clicked)
-sign_up_button.pack()
+sign_up_button = Button(signup_frame, text='SIGN UP', bg="#FF3399", fg="#FFFFFF", font=("yu gothic ui", 16, 'bold'),command=sign_up_clicked)
+sign_up_button.grid(row=3, column=0, columnspan=2, pady=16)
+
 
 def sign_up_view():
     new_text_frame.pack_forget()
@@ -133,22 +165,35 @@ def sign_up_view():
 
 
 
-
-
-
-
 # Sign in
-signin_username_l = Label(signin_frame, text="Username")
-signin_username_l.pack(fill='x', expand=True)
 
-signin_username = Entry(signin_frame)
-signin_username.pack(fill='x', expand=True)
+# Creating widgets
+login_label = Label(signin_frame, text="LOGIN", bg='#333333', fg="#FF3399", font=("yu gothic ui", 30))
+username_label = Label(signin_frame, text="Username", bg='#333333', fg="#FFFFFF", font=("yu gothic ui", 16))
+signin_username = Entry(signin_frame, font=("yu gothic ui", 16))
+signin_password = Entry(signin_frame, show="*", font=("yu gothic ui", 16))
+password_label = Label(signin_frame, text="Password ", bg='#333333', fg="#FFFFFF", font=("yu gothic ui", 16))
 
-signin_password_l = Label(signin_frame, text="Password")
-signin_password_l.pack(fill='x', expand=True)
 
-signin_password = Entry(signin_frame, show="*")
-signin_password.pack(fill='x', expand=True)
+# Placing widgets on the screen
+login_label.grid(row=0, column=0, columnspan=2, sticky="news", pady=40)
+username_label.grid(row=1, column=0)
+signin_username.grid(row=1, column=1, pady=16)
+password_label.grid(row=2, column=0)
+signin_password.grid(row=2, column=1, pady=16)
+
+#signin_username_l = Label(signin_frame, text="Username")
+#signin_username_l.place(x= 400, y = 90)
+#signin_username_l.pack(fill='x', expand=True)
+
+#signin_username = Entry(signin_frame)
+#signin_username.pack(fill='x', expand=True)
+
+#signin_password_l = Label(signin_frame, text="Password")
+#signin_password_l.pack(fill='x', expand=True)
+
+#signin_password = Entry(signin_frame, show="*")
+#signin_password.pack(fill='x', expand=True)
 
 
 def sign_in_clicked():
@@ -176,10 +221,12 @@ def sign_in_clicked():
             username = usrname
             signin_username.delete(0, 'end')
             signin_password.delete(0, 'end')
+            menu_view()
 
 
-sign_in_button = Button(signin_frame, text='Sign in', command=sign_in_clicked)
-sign_in_button.pack()
+sign_in_button = Button(signin_frame, text='LOG IN', bg="#FF3399", fg="#FFFFFF", font=("yu gothic ui", 16, 'bold'),command=sign_in_clicked)
+sign_in_button.grid(row=3, column=0, columnspan=2, pady=16)
+#sign_in_button.pack()
       
 
 def sign_in_view():
@@ -198,10 +245,36 @@ def sign_in_view():
 
 
 # HOME
-signin = Button(home_frame, text="Sign in", command=sign_in_view)
-signin.pack(fill='x', expand=True)
-signup = Button(home_frame, text='Sign up', command=sign_up_view)
-signup.pack(fill='x', expand=True)
+
+txt = "WELCOME TO"
+heading = Label(header_frame, text=txt, font=('yu gothic ui', 25, "bold"), bg="#040405",fg='white', bd=5, relief=FLAT)
+heading.place(x= 0, y=400)
+heading.pack(fill='both', expand = True)
+
+#header_band = Label(header_frame,bg="orange",height=2, width=150)
+#header_band.grid(sticky='w')
+#header_band.place(x=0,y=0)
+#header_band.pack(fill=BOTH, expand=True)
+
+e_note = Label(header_frame,text="E - NOTE",bg="black",fg="pink",font= ('verdana',33,'bold'))
+e_note.place(x=1, y=400)
+e_note.pack(fill='both',expand=True)
+#e_note.grid(sticky='w')
+
+
+signin = Button(home_frame, text="SIGN IN",bg="orange", font=('pacifico', 13, 'bold'), height= 2, width=10, relief = RIDGE, command=sign_in_view)
+signin.grid(row = 15, column=0, pady = 10)
+
+signup = Button(home_frame, text='SIGN UP',bg="orange", font=('pacifico', 13, 'bold'), height= 2,width =10, relief = RIDGE, command=sign_up_view)
+signup.grid(row = 16, column=0, pady = 13)
+
+student1 = Label(home_frame, text='21127142 - LẠC THIỆU QUÂN', fg= '#1F4690', bg = '#DAE2B6', font=('Times New Roman', 12))
+student1.grid(row = 19, column = 0, pady= 11, padx= 5)
+student1 = Label(home_frame, text='21127528 - NGUYỄN THỊ MINH MINH', fg= '#1F4690', bg = '#DAE2B6', font=('Times New Roman', 12))
+student1.grid(row = 20, column = 0, pady= 11, padx= 5)
+student1 = Label(home_frame, text='21127588 - PHẠM HOÀNG KHÁNH ĐĂNG', fg= '#1F4690', bg = '#DAE2B6', font=('Times New Roman', 12))
+student1.grid(row = 21, column = 0, pady= 11, padx= 5)
+
 
 
 
@@ -214,10 +287,11 @@ def back_home():
     signup_frame.pack_forget()
     home_frame.pack()
 
-back_button1 = Button(signin_frame, text='Back', command=back_home)
-back_button1.pack()
-back_button2 = Button(signup_frame, text='Back', command=back_home)
-back_button2.pack()
+back_button1 = Button(signin_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("yu gothic ui", 16, 'bold'), command=back_home)
+back_button1.grid(row=4, column=0, columnspan=2, pady=10)
+
+back_button2 = Button(signup_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("yu gothic ui", 16, 'bold'), command=back_home)
+back_button2.grid(row=4, column=0, columnspan=2, pady=10)
 
 
 
@@ -416,7 +490,7 @@ def upload_file():
 
 
 # Open file
-table = Treeview(open_frame, column=('c1', 'c2'), show='headings')
+table = ttk.Treeview(open_frame, column=('c1', 'c2'), show='headings')
 table.column('#1', anchor=CENTER)
 table.heading('#1', text='File name')
 table.column('#2', anchor=CENTER)
@@ -559,20 +633,21 @@ return_button.pack(pady=10)
 
 
 # Menu
+
 menu = Menu(window)
 window.config(menu=menu)
 
-fileMenu = Menu(menu)
-fileMenu.add_command(label='New text', command=new_text)
-fileMenu.add_command(label='Upload file', command=upload_file)
-fileMenu.add_command(label='Upload image', command=upload_img)
-fileMenu.add_command(label='Open file', command=open_file)
-menu.add_cascade(label='File', menu=fileMenu)
+# fileMenu = Menu(menu)
+# fileMenu.add_command(label='New text', command=new_text)
+# fileMenu.add_command(label='Upload file', command=upload_file)
+# fileMenu.add_command(label='Upload image', command=upload_img)
+# fileMenu.add_command(label='Open file', command=open_file)
+# menu.add_cascade(label='File', menu=fileMenu)
 
 def quit_clicked():
     files = glob.glob(ADDR+'tempFile.*')
     for f in files:
-        os.remove(f)
+       os.remove(f)
     client.sendall(QUIT.encode(FORMAT))
     client.close()
     window.quit()
@@ -581,8 +656,28 @@ helpMenu = Menu(menu)
 helpMenu.add_command(label='Exit', command=quit_clicked)
 menu.add_cascade(label='Help', menu=helpMenu)
 
+#Main menu
+newtext_button = Button(menu_frame, text = "  NEW TEXT  ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= new_text)
+newtext_button.grid(row=1, column=0, columnspan=3, pady=10)
+uploadimage_button = Button(menu_frame, text = "UPLOAD IMAGE", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= upload_img)
+uploadimage_button.grid(row=2, column=0, columnspan=3, pady=10)
+uploadfile_button = Button(menu_frame, text = "UPLOAD FILE ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= upload_file)
+uploadfile_button.grid(row=3, column=0, columnspan=3, pady=10)
+openfile_button = Button(menu_frame, text = " OPEN FILE  ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= open_file)
+openfile_button.grid(row=4, column=0, columnspan=3, pady=10)
+logout_button = Button(menu_frame, text = "  LOG OUT   ", bg= "#FF7396", fg="#FFFFFF", font=("consolas", 16, 'bold'), command= LOGOUT)
+logout_button.grid(row=5, column=0, columnspan=3, pady=10)
 
-
+def menu_view():
+    new_text_frame.pack_forget()
+    img_frame.pack_forget()
+    file_frame.pack_forget()
+    open_frame.pack_forget()
+    view_frame.pack_forget()
+    signin_frame.pack_forget()
+    home_frame.pack_forget()
+    signup_frame.pack_forget()
+    menu_frame.pack()
 
 
 
@@ -593,6 +688,7 @@ def main():
     print('Waiting for server...')
     try:
         print('Connected to server')
+        header_frame.pack(fill='x', expand=1)
         home_frame.pack()
         window.mainloop()
     except:
