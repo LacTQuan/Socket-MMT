@@ -209,7 +209,7 @@ def sign_in_clicked():
 
         #receive response
         receive_msg = client.recv(1024).decode(FORMAT)
-        messagebox.showinfo('A', receive_msg)
+        messagebox.showinfo('NOTICE', receive_msg)
         global username
 
         if receive_msg == LOGIN_SUCCESS:
@@ -305,7 +305,7 @@ t_file_name.pack(fill='x', expand=True)
 
 def save_text_clicked():
     if len(t_file_name.get()) == 0 or text_box.get('1.0', END) == '\n':
-        messagebox.showerror('A','Invalid text or filename')
+        messagebox.showerror('NOTICE','Invalid text or filename')
         return
     while True:
         client.sendall(NEW_TEXT.encode(FORMAT))
@@ -329,7 +329,7 @@ def save_text_clicked():
         client.recv(1024)
         client.sendall(t_file_name.get().encode(FORMAT))
         msg = client.recv(1024).decode(FORMAT)
-        messagebox.showinfo('A', msg)
+        messagebox.showinfo('NOTICE', msg)
         text_box.delete('1.0', END)
         t_file_name.delete(0, 'end')
         if msg == 'Success':
@@ -359,7 +359,7 @@ i_file_name.pack(fill='x', expand=1)
 
 def upload_img_clicked():
     if len(i_file_name.get()) == 0:
-        messagebox.showerror('A','Invalid text or filename')
+        messagebox.showerror('NOTICE','Invalid text or filename')
         return
     client.sendall(UP_IMG.encode(FORMAT))
     client.recv(1024)
@@ -385,7 +385,7 @@ def upload_img_clicked():
     client.recv(1024)
     client.sendall(i_file_name.get().encode(FORMAT))
     msg = client.recv(1024).decode(FORMAT)
-    messagebox.showinfo('A', msg)
+    messagebox.showinfo('NOTICE', msg)
 
 upload_img_button = Button(img_frame, text='Save image',font=("Consolas", 14), command=upload_img_clicked)
 upload_img_button.pack(fill=BOTH, expand=1)
@@ -412,7 +412,7 @@ f_file_name.pack(fill='x', expand=True)
 
 def upload_file_clicked():
     if len(f_file_name.get()) == 0:
-        messagebox.showerror('A','Invalid text or filename')
+        messagebox.showerror('NOTICE','Invalid text or filename')
         return
 
     client.sendall(UP_FILE.encode(FORMAT))
@@ -480,7 +480,7 @@ def download_file():
         data = f.read()
     with open(fn, 'wb') as g:
         g.write(data)
-    messagebox.showinfo('A', 'Download successfull')
+    messagebox.showinfo('NOTICE', 'Download successfull')
 
 
 
@@ -520,7 +520,7 @@ def view_clicked():
 
     selected = table.focus()
     if selected == '':
-        messagebox.showinfo('A', 'Please choose a specific item!!!')
+        messagebox.showinfo('NOTICE', 'Please choose a specific item!!!')
         return
     # open_frame.pack_forget()
     # view_frame.pack()
@@ -550,7 +550,7 @@ def view_clicked():
     open_file_in_new_window(open_file_type)
 
 
-view_button = Button(open_frame, text='View', font=('consolas', 14), command=view_clicked)
+view_button = Button(open_frame, text='View File', font=('consolas', 14, 'bold'), command=view_clicked, bg= 'pink', fg = 'white')
 view_button.pack(pady=10)
 
 def open_file():
@@ -658,13 +658,13 @@ def menu_view():
     home_frame.pack_forget()
     menu_frame.pack(expand=1)
 
-backMenu_button1 = Button(new_text_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("Times New Roman", 16, 'bold'),  command=menu_view)
+backMenu_button1 = Button(new_text_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("Consolas", 16, 'bold'),  command=menu_view)
 backMenu_button1.pack()
 backMenu_button2 = Button(img_frame, text=" BACK ", bg='black', fg="#FF3399", font=("Consolas", 14, 'bold'), command=menu_view)
 backMenu_button2.pack()
 backMenu_button3 = Button(file_frame, text=" BACK ", bg='black', fg="#FF3399", font=("Consolas", 14, 'bold'), command=menu_view)
 backMenu_button3.pack()
-backMenu_button4 = Button(open_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("Times New Roman", 16, 'bold'), command=menu_view)
+backMenu_button4 = Button(open_frame, text=" BACK ", bg='#333333', fg="#FF3399", font=("Consolas", 16, 'bold'), command=menu_view)
 backMenu_button4.pack()
 
 
